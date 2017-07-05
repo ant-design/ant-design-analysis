@@ -1,3 +1,3 @@
 # ant-design-analysis
 
-some useful analysis for antd and antd-mobile
+Some useful analysis for antd and antd-mobile.
