@@ -7,7 +7,7 @@
   <title>ant-design-analysis</title>
   <style>
     body { margin: 0 auto; padding: 0; width: 80%; }
-    .ifr { margin-top: 10px; }
+    .ifr { width: 100%; height: 100%; margin-top: 10px; }
   </style>
 </head>
 <body>
@@ -32,10 +32,19 @@
       vlist.innerHTML = optsHtml;
     });
 
-    // bind event
+    // bind select event
     vlist.addEventListener('change', evt => {
       renderIframe(evt.target.value);
     });
+
+    // change iframe's size
+    ifr.addEventListener('load', evt => {
+      var ifrm = evt.target;
+      var doc = ifrm.contentDocument? ifrm.contentDocument:
+        ifrm.contentWindow.document;
+      ifrm.style.width = doc.body.scrollWidth + 'px';
+      ifrm.style.height = doc.body.scrollHeight + 'px';
+    })
 
     function renderIframe(url) {
       ifr.src = 'antd-mobile@' + url + '.html';
