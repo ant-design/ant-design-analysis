@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>ant-design-analysis</title>
+  <style>
+    body { margin: 0 auto; padding: 0; width: 80%; }
+    .ifr { margin-top: 10px; }
+  </style>
+</head>
+<body>
+  <h2>ant-design-analysis</h2>
+  <p>The size and dependency analysis of `./dist/antd-mobile.min.js`</p>
+  <select id="versionlist"></select>
+  <iframe class="ifr" frameborder="0" sandbox="allow-forms allow-scripts allow-same-origin"></iframe>
+
+  <script>
+    var vlist = document.querySelector('#versionlist');
+    var ifr = document.querySelector('.ifr');
+
+    // render select/option
+    ajax('./antd-mobile-versions.json', function(res) {
+      var optsHtml = '';
+      JSON.parse(res).forEach((ver, index) => {
+        optsHtml += `<option value="${ver}">${ver}</option>`;
+        if (index === 0) {
+          renderIframe(ver);
+        }
+      });
+      vlist.innerHTML = optsHtml;
+    });
+
+    // bind event
+    vlist.addEventListener('change', evt => {
+      renderIframe(evt.target.value);
+    });
+
+    function renderIframe(url) {
+      ifr.src = 'antd-mobile@' + url + '.html';
+    }
+
+    function ajax(url, success) {
+      var xhr = new XMLHttpRequest();
+      xhr.onload = function() {
+        if (xhr.status >= 200 && xhr.status < 400) {
+          // Success!
+          success(xhr.responseText);
+        } else {
+          console.log('XMLHttpRequest error');
+        }
+      };
+      xhr.open("GET", url, true);
+      xhr.send();
+    }
+  </script>
+</body>
+</html>
