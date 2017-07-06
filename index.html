@@ -23,17 +23,27 @@
   <script>
     var vlist = document.querySelector('#versionlist');
     var ifr = document.querySelector('.ifr');
+    var selectedVersion = '';
+
+    // hash match `#antd-mobile/versions/1.4.1`
+    // e.g. https://ant-design.github.io/ant-design-analysis/#antd-mobile/versions/1.4.1
+    if (location.hash && location.hash.indexOf('#antd-mobile/versions/') === 0) {
+      selectedVersion = location.hash.split('/')[2];
+    }
 
     // render select/option
     ajax('./antd-mobile-versions.json', function(res) {
       var optsHtml = '';
-      JSON.parse(res).forEach((ver, index) => {
-        optsHtml += `<option value="${ver}">${ver}</option>`;
-        if (index === 0) {
-          renderIframe(ver);
-        }
+      var hashSel;
+      var verArr = JSON.parse(res).reverse();
+      verArr.forEach((ver, index) => {
+        hashSel = selectedVersion && ver === `${selectedVersion}-stats`;
+        optsHtml += hashSel ?
+          `<option value="${ver}" selected="selected">${ver}</option>` :
+          `<option value="${ver}">${ver}</option>`;
       });
       vlist.innerHTML = optsHtml;
+      renderIframe(hashSel ? `${selectedVersion}-stats` : verArr[0]);
     });
 
     // bind select event
