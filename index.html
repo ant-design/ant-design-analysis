@@ -56,9 +56,11 @@
       var ifrm = evt.target;
       var doc = ifrm.contentDocument? ifrm.contentDocument:
         ifrm.contentWindow.document;
-      ifrm.style.width = doc.body.scrollWidth + 'px';
-      ifrm.style.height = doc.body.scrollHeight + 'px';
-    })
+      // In chrome61 `document.body.scrollXxx` is invalid, use `document.scrollingElement.scrollXxx`
+      const scrollNode = doc.scrollingElement ? doc.scrollingElement : doc.body;
+      ifrm.style.width = scrollNode.scrollWidth + 'px';
+      ifrm.style.height = scrollNode.scrollHeight + 'px';
+    });
 
     function renderIframe(url) {
       ifr.src = 'antd-mobile@' + url + '.html';
